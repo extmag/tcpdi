@@ -173,7 +173,7 @@ class FPDF_TPL extends FPDF {
             return false;
         }
     }
-    
+
     /**
      * Use a Template in current Page or other Template
      *
@@ -190,6 +190,7 @@ class FPDF_TPL extends FPDF {
      * @param int $_w The new width of the template
      * @param int $_h The new height of the template
      * @retrun array The height and width of the template
+     * @return array
      */
     function useTemplate($tplidx, $_x = null, $_y = null, $_w = 0, $_h = 0) {
         if ($this->page <= 0)
@@ -268,9 +269,16 @@ class FPDF_TPL extends FPDF {
             
         return array("w" => $_w, "h" => $_h);
     }
-    
+
     /**
      * See FPDF/TCPDF-Documentation ;-)
+     * @param $family
+     * @param string $style
+     * @param int $size
+     * @param string $fontfile
+     * @param string $subset
+     * @param bool $out
+     * @return mixed
      */
     public function SetFont($family, $style = '', $size = 0, $fontfile='', $subset='default', $out=true) {
         if (is_subclass_of($this, 'TCPDF')) {
@@ -288,9 +296,29 @@ class FPDF_TPL extends FPDF {
             $this->_res['page'][$this->page]['fonts'][$fontkey] =& $this->fonts[$fontkey];
         }
     }
-    
+
     /**
      * See FPDF/TCPDF-Documentation ;-)
+     * @param $file
+     * @param string $x
+     * @param string $y
+     * @param int $w
+     * @param int $h
+     * @param string $type
+     * @param string $link
+     * @param string $align
+     * @param bool $resize
+     * @param int $dpi
+     * @param string $palign
+     * @param bool $ismask
+     * @param bool $imgmask
+     * @param int $border
+     * @param bool $fitbox
+     * @param bool $hidden
+     * @param bool $fitonpage
+     * @param bool $alt
+     * @param array $altimgs
+     * @return mixed
      */
     function Image(
         $file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false,
@@ -311,11 +339,16 @@ class FPDF_TPL extends FPDF {
         
         return $ret;
     }
-    
+
     /**
      * See FPDF-Documentation ;-)
      *
      * AddPage is not available when you're "in" a template.
+     * @param string $orientation
+     * @param string $format
+     * @param bool $keepmargins
+     * @param bool $tocpage
+     * @return mixed
      */
     function AddPage($orientation = '', $format = '', $keepmargins = false, $tocpage = false) {
         if (is_subclass_of($this, 'TCPDF')) {
@@ -331,6 +364,13 @@ class FPDF_TPL extends FPDF {
 
     /**
      * Preserve adding Links in Templates ...won't work
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $link
+     * @param int $spaces
+     * @return mixed
      */
     function Link($x, $y, $w, $h, $link, $spaces = 0) {
         if (is_subclass_of($this, 'TCPDF')) {
@@ -449,6 +489,7 @@ class FPDF_TPL extends FPDF {
 
     /**
      * Private Method
+     * @param $s
      */
     function _out($s) {
         if ($this->state == 2 && $this->_intpl) {

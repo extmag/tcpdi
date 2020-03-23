@@ -175,6 +175,7 @@ class tcpdi_parser {
     /**
      * Parse a PDF document an return an array of objects.
      * @param $data (string) PDF data to parse.
+     * @param $uniqueid
      * @public
      * @since 1.0.000 (2011-05-24)
      */
@@ -292,7 +293,7 @@ class tcpdi_parser {
 
     /**
      * Read a single /Page element, recursing through /Kids if necessary
-     *
+     * @param $page
      */
     private function readPage($page) {
         if (isset($page[1][1]['/Kids'])) {
@@ -678,7 +679,7 @@ class tcpdi_parser {
      * Get raw stream data
      * @param $offset (int) Stream offset.
      * @param $length (int) Stream length.
-     * @return string Steam content
+     * @return array Steam content
      * @protected
      */
     protected function getRawStream($offset, $length) {
@@ -696,7 +697,8 @@ class tcpdi_parser {
 
     /**
      * Get object type, raw value and offset to next object
-     * @param $offset (int) Object offset.
+     * @param int $offset (int) Object offset.
+     * @param null $data
      * @return array containing object type, raw value and offset to next object
      * @protected
      * @since 1.0.000 (2011-06-20)
@@ -1034,7 +1036,7 @@ class tcpdi_parser {
 
     /**
      * Extract object stream to find out what it contains.
-     *
+     * @param $key
      */
     function extractObjectStream($key) {
         $objref = array(PDF_TYPE_OBJREF, $key[0], $key[1]);

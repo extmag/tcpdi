@@ -151,6 +151,7 @@ class TCPDI extends FPDF_TPL {
     /**
      * Set the PDF version
      *
+     * @param string $version
      * @return string
      */
     public function setPDFVersion($version = '1.3') {
@@ -161,6 +162,7 @@ class TCPDI extends FPDF_TPL {
      * Import a page
      *
      * @param int $pageno pagenumber
+     * @param string $boxName
      * @return int Index of imported page - to use with fpdf_tpl::useTemplate()
      */
     public function importPage($pageno, $boxName = '/CropBox') {
@@ -683,6 +685,7 @@ class TCPDI extends FPDF_TPL {
 
     /**
      * Modified so not each call will add a newline to the output.
+     * @param $s
      */
     protected function _straightOut($s) {
         if ($this->state == 2) {
