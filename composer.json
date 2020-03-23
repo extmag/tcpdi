@@ -1,6 +1,6 @@
 {
-  "name": "rafikhaceb/tcpdi",
-  "version": "1.0.3",
+  "name": "faradey/tcpdi",
+  "version": "1.0.4",
   "type": "library",
   "description": "TCPDI is a PHP class for importing PDF to use with TCPDF",
   "keywords": [
@@ -12,9 +12,9 @@
   "license": "Apache-2.0",
   "authors": [
     {
-      "name": "Nicola Asuni",
-      "email": "info@tecnick.com",
-      "homepage": "http://nicolaasuni.tecnick.com"
+      "name": "Vitalij",
+      "email": "rvansp@gmail.com",
+      "homepage": "https://el-post.com"
     }
   ],
   "require": {
