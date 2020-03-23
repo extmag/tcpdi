@@ -15,7 +15,7 @@ Link package in composer.json, e.g.
 ```json
 {
     "require": {
-        "rafikhaceb/tcpdi": "dev-master"
+        "faradey/tcpdi": "^1.0.4"
     }
 }
 ```
