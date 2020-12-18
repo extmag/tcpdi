@@ -1,6 +1,6 @@
 {
   "name": "faradey/tcpdi",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "library",
   "description": "TCPDI is a PHP class for importing PDF to use with TCPDF",
   "keywords": [
@@ -14,7 +14,7 @@
     {
       "name": "Vitalij",
       "email": "rvansp@gmail.com",
-      "homepage": "https://extmag.com"
+      "homepage": "https://extmag.com/en"
     }
   ],
   "require": {
