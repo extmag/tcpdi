@@ -132,7 +132,7 @@ class TCPDI extends FPDF_TPL {
      * Returns a PDF parser object
      *
      * @param string $filename
-     * @return fpdi_pdf_parser
+     * @return tcpdi_parser
      */
     protected function _getPdfParser($filename) {
         $data = file_get_contents($filename);
@@ -152,7 +152,7 @@ class TCPDI extends FPDF_TPL {
      * Set the PDF version
      *
      * @param string $version
-     * @return string
+     * @return void
      */
     public function setPDFVersion($version = '1.3') {
         $this->PDFVersion = $version;
@@ -247,7 +247,7 @@ class TCPDI extends FPDF_TPL {
         $parser->setPageno($pageno);
         $boxes = $parser->getPageBoxes($pageno, $this->k);
         foreach ($boxes as $name => $box) {
-            if ($name{0} == '/') {
+            if ($name[0] == '/') {
                 $boxes[substr($name, 1)] = $box;
                 unset($boxes[$name]);
             }
@@ -513,8 +513,9 @@ class TCPDI extends FPDF_TPL {
                             $this->_out('/I' . $image['i'] . ' ' . $image['n'] . ' 0 R');
                     }
                     if (isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls'])) {
-                        foreach($this->_res['tpl'][$tplidx]['tpls'] as $i => $tpl)
+                        foreach($this->_res['tpl'][$tplidx]['tpls'] as $i => $tpl) {
                             $this->_out($this->tplprefix . $i . ' ' . $tpl['n'] . ' 0 R');
+                        }
                     }
                     $this->_out('>>');
                 }

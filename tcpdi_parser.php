@@ -186,7 +186,7 @@ class tcpdi_parser {
         $this->uniqueid = $uniqueid;
         $this->pdfdata = $data;
         // get length
-        $pdflen = strlen($this->pdfdata);
+        //$pdflen = strlen($this->pdfdata);
         // initialize class for decoding filters
         $this->FilterDecoders = new TCPDF_FILTERS();
         // get xref and trailer data
@@ -226,7 +226,7 @@ class tcpdi_parser {
 
     /**
      * Return an array of parsed PDF document objects.
-     * @return (array) Array of parsed PDF document objects.
+     * @return array (array) Array of parsed PDF document objects.
      * @public
      * @since 1.0.000 (2011-06-26)
      */
@@ -710,11 +710,11 @@ class tcpdi_parser {
         $objtype = ''; // object type to be returned
         $objval = ''; // object value to be returned
         // skip initial white space chars: \x00 null (NUL), \x09 horizontal tab (HT), \x0A line feed (LF), \x0C form feed (FF), \x0D carriage return (CR), \x20 space (SP)
-        while (strspn($data{$offset}, "\x00\x09\x0a\x0c\x0d\x20") == 1) {
+        while (strspn($data[$offset], "\x00\x09\x0a\x0c\x0d\x20") == 1) {
             $offset++;
         }
         // get first char
-        $char = $data{$offset};
+        $char = $data[$offset];
         // get object type
         switch ($char) {
             case '%': { // \x25 PERCENT SIGN
@@ -745,10 +745,10 @@ class tcpdi_parser {
                 if ($char == '(') {
                     $open_bracket = 1;
                     while ($open_bracket > 0) {
-                        if (!isset($data{$strpos})) {
+                        if (!isset($data[$strpos])) {
                             break;
                         }
-                        $ch = $data{$strpos};
+                        $ch = $data[$strpos];
                         switch ($ch) {
                             case '\\': { // REVERSE SOLIDUS (5Ch) (Backslash)
                                 // skip next character
@@ -793,7 +793,7 @@ class tcpdi_parser {
             }
             case '<':   // \x3C LESS-THAN SIGN
             case '>': { // \x3E GREATER-THAN SIGN
-                if (isset($data{($offset + 1)}) AND ($data{($offset + 1)} == $char)) {
+                if (isset($data[($offset + 1)]) AND ($data[($offset + 1)] == $char)) {
                     // dictionary object
                     $objtype = PDF_TYPE_DICTIONARY;
                     if ($char == '<') {
@@ -816,7 +816,7 @@ class tcpdi_parser {
                 break;
             }
             default: {
-                $frag = $data{$offset} . @$data{$offset+1} . @$data{$offset+2} . @$data{$offset+3};
+                $frag = $data[$offset] . @$data[$offset+1] . @$data[$offset+2] . @$data[$offset+3];
                 switch ($frag) {
                     case 'endo':
                         // indirect object
@@ -893,16 +893,16 @@ class tcpdi_parser {
         $dict = '';
         $offset += 2;
         do {
-            if ($data{$offset} == '>' && $data{$offset+1} == '>') {
+            if ($data[$offset] == '>' && $data[$offset+1] == '>') {
                 $i--;
                 $dict .= '>>';
                 $offset += 2;
-            } else if ($data{$offset} == '<' && $data{$offset+1} == '<') {
+            } else if ($data[$offset] == '<' && $data[$offset+1] == '<') {
                 $i++;
                 $dict .= '<<';
                 $offset += 2;
             } else {
-                $dict .= $data{$offset};
+                $dict .= $data[$offset];
                 $offset++;
             }
         } while ($i>0);
@@ -1011,7 +1011,7 @@ class tcpdi_parser {
                 $objs = $streaminfo[0];
                 if (!isset($this->objstreams[$objs[0]][$objs[1]])) {
                     // Fetch and decode object stream
-                    $offset = $this->findObjectOffset($objs);;
+                    $offset = $this->findObjectOffset($objs);
                     $objstream = $this->getObjectVal(array(PDF_TYPE_OBJREF, $objs[0], $objs[1]));
                     $decoded = $this->decodeStream($objstream[1][1], $objstream[2][1]);
                     $this->objstreams[$objs[0]][$objs[1]] = $decoded[0]; // Store just the data, in case we need more from this objstream

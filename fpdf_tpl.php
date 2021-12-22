@@ -455,8 +455,9 @@ class FPDF_TPL extends FPDF {
                           $this->_out('/I' . $image['i'] . ' ' . $image['n'] . ' 0 R');
                 }
                 if (isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls'])) {
-                    foreach($this->_res['tpl'][$tplidx]['tpls'] as $i => $tpl)
+                    foreach($this->_res['tpl'][$tplidx]['tpls'] as $i => $tpl) {
                         $this->_out($this->tplprefix . $i . ' ' . $tpl['n'] . ' 0 R');
+                    }
                 }
                 $this->_out('>>');
             }
