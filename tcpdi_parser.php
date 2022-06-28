@@ -485,7 +485,7 @@ class tcpdi_parser
     {
         // try to read Cross-Reference Stream
         list($xrefobj, $unused) = $this->getRawObject($startxref);
-        $xrefcrs = $this->getIndirectObject($xrefobj[1], $startxref, true);
+        $xrefcrs = $this->getIndirectObject($xrefobj[1], $startxref);
         if (!isset($xref['xref_location'])) {
             $xref['xref_location'] = $startxref;
             $xref['max_object'] = 0;
