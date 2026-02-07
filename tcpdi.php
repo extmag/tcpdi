@@ -117,7 +117,7 @@ class TCPDI extends FPDF_TPL {
      * @return int number of available pages
      */
     public function setSourceData($pdfdata) {
-        $filename = uniqid('tcpdi-');
+        $filename = 'tcpdi-' . bin2hex(random_bytes(8));
         $this->current_filename = $filename;
 
         if (!isset($this->parsers[$filename]))
