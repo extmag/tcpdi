@@ -19,8 +19,16 @@
 - **[MEDIUM] Remove `@` error suppression** (Bug 8): `getRawObject()` used `@$data[...]` to suppress undefined offset warnings. Replaced with explicit `strlen()` bounds check.
 - **[MEDIUM] Fix relative `require_once` paths** (Bug 9): `require_once('fpdf_tpl.php')` and `require_once('tcpdi_parser.php')` relied on include_path. Fixed to use `__DIR__` for reliable resolution.
 
+### Compatibility
+
+- Replaced `uniqid()` (soft-deprecated in PHP 8.4) with `bin2hex(random_bytes(8))`
+- Replaced legacy `var` property declarations with `public` in `FPDF_TPL`
+- Tested and compatible with PHP 7.4 — 8.5
+
 ### Development
 
-- Added PHPUnit 9.6 test suite with 30 tests covering all fixed bugs
+- Added PHPUnit 9.6 test suite with 58 tests (30 unit + 21 integration + 7 image integration)
+- Integration tests cover real TCPDF-generated PDFs, rotation, page boxes, annotations, caching
+- Image integration tests cover PNG/GIF overlay on imported pages
 - Added `phpunit.xml` configuration
 - Added `autoload-dev` PSR-4 mapping for tests
