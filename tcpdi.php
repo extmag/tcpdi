@@ -21,9 +21,9 @@
 // Dummy shim to allow unmodified use of fpdf_tpl
 class FPDF extends TCPDF {}
 
-require_once('fpdf_tpl.php');
+require_once(__DIR__ . '/fpdf_tpl.php');
 
-require_once('tcpdi_parser.php');
+require_once(__DIR__ . '/tcpdi_parser.php');
 
 
 class TCPDI extends FPDF_TPL {
@@ -286,7 +286,7 @@ class TCPDI extends FPDF_TPL {
 
         if (is_array($annots) && $annots[0] == PDF_TYPE_OBJECT // We got an object
                 && is_array($annots[1]) && $annots[1][0] == PDF_TYPE_ARRAY // It's an array
-                && is_array($annots[1][1]) && count($annots[1][1] > 1) // It's not empty - there are annotations for this page
+                && is_array($annots[1][1]) && count($annots[1][1]) > 0 // It's not empty - there are annotations for this page
         ) {
             if (!isset($this->_obj_stack[$fn])) {
                 $this->_obj_stack[$fn] = array();
@@ -803,11 +803,13 @@ class TCPDI extends FPDF_TPL {
                             ord($s[$count]) <= ord('9')) {
                             $oct = ''. $s[$count];
 
-                            if (ord($s[$count+1]) >= ord('0') &&
+                            if ($count + 1 < $n &&
+                                ord($s[$count+1]) >= ord('0') &&
                                 ord($s[$count+1]) <= ord('9')) {
                                 $oct .= $s[++$count];
 
-                                if (ord($s[$count+1]) >= ord('0') &&
+                                if ($count + 1 < $n &&
+                                    ord($s[$count+1]) >= ord('0') &&
                                     ord($s[$count+1]) <= ord('9')) {
                                     $oct .= $s[++$count];
                                 }

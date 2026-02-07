@@ -372,7 +372,7 @@ class tcpdi_parser
         $startxref += strspn($this->pdfdata, "\r\n", $startxref);
 
         // check xref position
-        if (strpos($this->pdfdata, 'xref', $startxref) == $startxref) {
+        if (strpos($this->pdfdata, 'xref', $startxref) === $startxref) {
             // Cross-Reference
             $xref = $this->decodeXref($startxref, $xref);
         } else {
@@ -869,7 +869,11 @@ class tcpdi_parser
             }
             default:
             {
-                $frag = $data[$offset] . @$data[$offset + 1] . @$data[$offset + 2] . @$data[$offset + 3];
+                $len = strlen($data);
+                $frag = $data[$offset]
+                    . ($offset + 1 < $len ? $data[$offset + 1] : '')
+                    . ($offset + 2 < $len ? $data[$offset + 2] : '')
+                    . ($offset + 3 < $len ? $data[$offset + 3] : '');
                 switch ($frag) {
                     case 'endo':
                         // indirect object
@@ -995,12 +999,12 @@ class tcpdi_parser
     {
         $obj = explode('_', $obj_ref);
         if (($obj === false) or (count($obj) != 2)) {
-            $this->Error('Invalid object reference: ' . $obj);
+            $this->Error('Invalid object reference: ' . $obj_ref);
             return;
         }
         $objref = $obj[0] . ' ' . $obj[1] . ' obj';
 
-        if (strpos($this->pdfdata, $objref, $offset) != $offset) {
+        if (strpos($this->pdfdata, $objref, $offset) !== $offset) {
             // an indirect reference to an undefined object shall be considered a reference to the null object
             return array('null', 'null', $offset);
         }
@@ -1197,24 +1201,22 @@ class tcpdi_parser
         }
         $filters = array();
         foreach ($sdic as $k => $v) {
-            if ($v[0] == PDF_TYPE_TOKEN) {
-                if (($k == '/Length') and ($v[0] == PDF_TYPE_NUMERIC)) {
-                    // get declared stream lenght
-                    $declength = intval($v[1]);
-                    if ($declength < $slength) {
-                        $stream = substr($stream, 0, $declength);
-                        $slength = $declength;
-                    }
-                } elseif ($k == '/Filter') {
-                    if ($v[0] == PDF_TYPE_TOKEN) {
-                        // single filter
-                        $filters[] = $v[1];
-                    } elseif ($v[0] == PDF_TYPE_ARRAY) {
-                        // array of filters
-                        foreach ($v[1] as $flt) {
-                            if ($flt[0] == PDF_TYPE_TOKEN) {
-                                $filters[] = $flt[1];
-                            }
+            if (($k == '/Length') and ($v[0] == PDF_TYPE_NUMERIC)) {
+                // get declared stream length
+                $declength = intval($v[1]);
+                if ($declength < $slength) {
+                    $stream = substr($stream, 0, $declength);
+                    $slength = $declength;
+                }
+            } elseif ($k == '/Filter') {
+                if ($v[0] == PDF_TYPE_TOKEN) {
+                    // single filter
+                    $filters[] = $v[1];
+                } elseif ($v[0] == PDF_TYPE_ARRAY) {
+                    // array of filters
+                    foreach ($v[1] as $flt) {
+                        if ($flt[0] == PDF_TYPE_TOKEN) {
+                            $filters[] = $flt[1];
                         }
                     }
                 }
@@ -1529,8 +1531,7 @@ class tcpdi_parser
      */
     public function Error($msg)
     {
-        // exit program and print error
-        die("<strong>TCPDI_PARSER ERROR [{$this->uniqueid}]: </strong>" . $msg);
+        throw new \RuntimeException("TCPDI_PARSER ERROR [{$this->uniqueid}]: " . $msg);
     }
 
 } // END OF TCPDF_PARSER CLASS
